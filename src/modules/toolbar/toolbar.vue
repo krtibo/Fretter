@@ -96,6 +96,8 @@ export default defineComponent({
 <style>
 	.toolbar {
 		display: flex;
+		width: 100%;
+		flex-wrap: wrap;
 		gap: 8px;
 	}
 	.deselect {
