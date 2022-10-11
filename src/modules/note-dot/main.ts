@@ -1,0 +1,1 @@
+export { default as NoteDot } from './note-dot.vue';
