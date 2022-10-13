@@ -46,7 +46,11 @@ export default defineComponent({
 		const frets: Fretboard = { strings: [e6String, bString, gString, dString, aString, e1String] };
 
 		const noteClicked = ((note: number, aString: number) => {
-			activeNote.value = note;
+			if (note === activeNote.value) { 
+				activeNote.value = -1; 
+			} else {
+				activeNote.value = note;
+			}
 			activeString.value = aString;
 		});
 
