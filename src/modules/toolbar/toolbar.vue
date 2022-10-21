@@ -2,6 +2,12 @@
 	<div>
 		<div class="toolbar">
 			<button
+				class="button is-active is-danger"
+				:disabled="currentIntervals.length === 0"
+				@click="$emit('interval', -1)">
+				Deselect All
+			</button>
+			<button
 				class="button is-active"
 				:class="{ 'is-primary': isCurrent(1)}"
 				@click="$emit('interval', 1)">
@@ -60,14 +66,6 @@
 				:class="{ 'is-primary': isCurrent(11)}"
 				@click="$emit('interval', 11)">
 				Major 7<sup>th</sup>
-			</button>
-		</div>
-		<div class="deselect">
-			<button
-				class="button is-active is-danger"
-				:disabled="currentIntervals.length === 0"
-				@click="$emit('interval', -1)">
-				Deselect All
 			</button>
 		</div>
 	</div>

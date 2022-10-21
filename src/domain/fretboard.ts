@@ -29,6 +29,6 @@ export function numToNote(num: number): string {
 	case 9: return 'C#/Db';
 	case 10: return 'D';
 	case 11: return 'D#/Eb';
-	default: return 'N/A';
+	default: return '';
 	}
 }
