@@ -24,9 +24,16 @@
 			<button
 				class="button is-active"
 				@click="generateRandomNote">
-				Generate random scale
+				Generate random scale and fret
 			</button>
-			<h1 class="is-size-1">{{ numToNote(randomNote) }} {{ randomMajorMinor }}</h1>
+			<p
+			v-if="randomNote !== -1"
+			class="is-size-1">{{ numToNote(randomNote) }} {{ randomMajorMinor }}
+				<span
+				v-if="randomNote !== -1"
+				class="is-size-5">at fret No. {{ randomFret }}
+				</span>
+			</p>
 		</div>
 	</div>
 </template>
@@ -48,6 +55,7 @@ export default defineComponent({
 		const currentIntervals = ref([1]);
 		const randomNote = ref(-1);
 		const randomMajorMinor = ref("");
+		const randomFret = ref(-1);
 		currentIntervals.value = [];
 		const e1String: GuitarString = { notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0] };
 		const aString: GuitarString  = { notes: [5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5] };
@@ -95,11 +103,21 @@ export default defineComponent({
 				if (newValue !== randomNote.value) {
 					randomNote.value = newValue;
 					generateMajorMinor();
+					generateRandomFret();
 					return
 				}
 			}
 		}
 
+		const generateRandomFret = () => {
+			while(true) {
+				let newFret = Math.floor(Math.random() * 12);
+				if (newFret != randomFret.value) {
+					randomFret.value = newFret;
+					return
+				}
+			}
+		}
 
 		const generateMajorMinor = () => {
 			randomMajorMinor.value = Math.floor(Math.random() * 10) % 2 === 1 ? "major" : "minor";
@@ -118,6 +136,7 @@ export default defineComponent({
 			numToNote,
 			randomNote,
 			randomMajorMinor,
+			randomFret,
 		};
 	},
 });
