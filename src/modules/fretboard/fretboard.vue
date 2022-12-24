@@ -20,22 +20,26 @@
 				:current-intervals="currentIntervals"
 				@interval="changeInterval" />
 		</div>
-		<div class="random-note-generator section">
-			<button
-				class="button is-active"
-				@click="generateRandomNote">
-				Generate random scale and fret
-			</button>
-			<p
-			v-if="randomNote !== -1"
-			class="is-size-1">{{ numToNote(randomNote) }} {{ randomMajorMinor }}
-				<span
-				v-if="randomNote !== -1"
-				class="is-size-5">at fret No. {{ randomFret }}
-				</span>
-			</p>
+		<div class="generators mb-5">
+			<div class="random-note-generator section">
+				<button
+					class="button is-active"
+					@click="generateRandomNote">
+					Generate random scale and fret
+				</button>
+				<div class="random-scale mt-5 pt-4" v-if="randomNote !== -1">
+					<div >
+						<div class="is-6">Scale</div> 
+						<span class="title is-3"> {{ numToNote(randomNote) }} {{ randomMajorMinor }}</span>
+					</div>
+					<div>
+						<div class="is-6">Fret</div> 
+						<span class="title is-3">No. {{ randomFret }}</span>
+					</div>
+				</div>
+			</div>
+			<triad-generator />
 		</div>
-		<triad-generator />
 	</div>
 </template>
 
@@ -192,5 +196,37 @@ export default defineComponent({
 		box-shadow: 0 0 16px #bbbbbb;
 		padding: 32px;
 		border-radius: 16px;
+		width: 100%;
+	}
+
+	.generators {
+		display: flex;
+		gap: 32px;
+		align-items: flex-start;
+	}
+
+	.random-scale {
+		display: flex;
+        gap: 64px;
+        border-top: 1px solid hsl(0, 0%, 86%);
+	}
+
+	@media screen and (max-width: 1280px) {
+		.generators {
+			flex-direction: column;
+			align-items: stretch;
+		}
+		.section {
+			width: auto;
+			margin-left: 16px;
+			margin-right: 16px;
+		}
+	}
+	@media screen and (max-width: 900px) {
+		.note-dot {
+			width: 32px;
+			height: 24px;
+			font-size: 10px;
+		}
 	}
 </style>

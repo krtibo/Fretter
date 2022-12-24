@@ -15,7 +15,7 @@
                 Inversion
             </label>
         </div>
-        <div class="generated mt-5" v-if="generatedValues[0] !== -1">
+        <div class="generated mt-5 pt-4" v-if="generatedValues[0] !== -1">
             <div class="scale">
                 <div class="is-6">Scale</div> 
                 <span class="title is-3"> {{ scales[generatedValues[0]] }} major</span>
@@ -49,8 +49,7 @@ export default defineComponent({
             generatedValues.value[1] = Math.floor(Math.random() * degrees.value.length);
             generatedValues.value[2] = Math.floor(Math.random() * inversions.value.length);
         };
-        
-        //generateTriad();
+
         return { degreeCheckbox, generateTriad, inversionCheckbox, generatedValues, scales, degrees, inversions }
 	},
 });
@@ -59,8 +58,10 @@ export default defineComponent({
     .generated {
         display: flex;
         gap: 64px;
-    };
+        border-top: 1px solid hsl(0, 0%, 86%);
+    }
     .control {
+        display: flex;
         align-items: center;
     }
 </style>
