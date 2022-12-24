@@ -35,6 +35,7 @@
 				</span>
 			</p>
 		</div>
+		<triad-generator />
 	</div>
 </template>
 
@@ -43,11 +44,13 @@ import { ref, defineComponent } from 'vue';
 import { NoteDot } from 'src/modules/note-dot/main';
 import { Fretboard, GuitarString, numToNote } from 'src/domain/fretboard';
 import { Toolbar } from 'src/modules/toolbar/main';
+import { TriadGenerator  } from 'src/modules/triad-generator/main';
 
 export default defineComponent({
 	components: {
 		NoteDot,
 		Toolbar,
+		TriadGenerator,
 	},
 	setup() {
 		const activeNote = ref(-1);

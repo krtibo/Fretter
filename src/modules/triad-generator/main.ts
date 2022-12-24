@@ -1,0 +1,1 @@
+export { default as TriadGenerator } from './triad-generator.vue';
