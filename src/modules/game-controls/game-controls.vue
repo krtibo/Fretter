@@ -63,8 +63,8 @@ export default defineComponent({
 	emits: ['generated'],
 	setup(props, {emit}) {
         const isDropdownActive = ref(false);
-        const fromValue = ref(1);
-        const toValue = ref(12);
+        const fromValue = ref(Number(localStorage.fromValue));
+        const toValue = ref(Number(localStorage.toValue));
         const invalidBounds = ref(false);
         const answerLabels = ref([-1]);
         const lastResultBool = ref(false);
@@ -75,12 +75,15 @@ export default defineComponent({
             lastResultText.value = '';
             lastGuess.value = -1;
         };
+        generateWithBounds(fromValue.value, toValue.value);
         const validateBounds = () => {
             if (fromValue.value >= toValue.value) {
                 invalidBounds.value = true;
             } else {
                 invalidBounds.value = false
             }
+            localStorage.fromValue = fromValue.value;
+            localStorage.toValue = toValue.value;
         };
         const answerLabelsCo = computed(() => {
             const value = ref([-1]);

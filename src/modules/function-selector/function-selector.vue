@@ -22,16 +22,21 @@
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
+    props: {
+        isGameModeProp: { type: Boolean, default: false },
+    },
 	emits: ['selected'],
-	setup(_, { emit }) {
-        const isGameMode = ref(false);
+	setup(props, { emit }) {
+        const isGameMode = ref(props.isGameModeProp);
         const toggleGameMode = () => {
             isGameMode.value = true;
             emit('selected', isGameMode.value);
+            localStorage.isGameMode = isGameMode.value;
         };
         const toggleLearnMode = () => {
             isGameMode.value = false;
             emit('selected', isGameMode.value);
+            localStorage.isGameMode = isGameMode.value;
         };
         return {
             isGameMode,

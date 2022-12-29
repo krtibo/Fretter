@@ -1,6 +1,7 @@
 <template>
 	<div class="fretboard">
 		<function-selector
+		:is-game-mode-prop="isGameMode"
 		@selected="functionChanged" />
 		<div class="section">
 			<table align="right">
@@ -71,7 +72,7 @@ export default defineComponent({
 		GameControls,
 	},
 	setup() {
-		const isGameMode = ref(false);
+		const isGameMode = localStorage.isGameMode === 'true' ? ref(true) : ref(false);
 		const activeNote = ref(-1);
 		const activeString = ref(-1);
 		const currentIntervals = ref([1]);
