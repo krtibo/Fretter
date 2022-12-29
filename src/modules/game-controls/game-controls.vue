@@ -73,6 +73,7 @@ export default defineComponent({
         const generateWithBounds = (from: number, to: number) => {
             emit('generated', from, to);
             lastResultText.value = '';
+            lastGuess.value = -1;
         };
         const validateBounds = () => {
             if (fromValue.value >= toValue.value) {
