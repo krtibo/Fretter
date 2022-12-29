@@ -63,8 +63,8 @@ export default defineComponent({
 	emits: ['generated'],
 	setup(props, {emit}) {
         const isDropdownActive = ref(false);
-        const fromValue = ref(Number(localStorage.fromValue));
-        const toValue = ref(Number(localStorage.toValue));
+        const fromValue = ref(Number(localStorage.fromValue) ? Number(localStorage.fromValue) : 1);
+        const toValue = ref(Number(localStorage.toValue) ? Number(localStorage.toValue) : 12);
         const invalidBounds = ref(false);
         const answerLabels = ref([-1]);
         const lastResultBool = ref(false);
