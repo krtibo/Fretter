@@ -15,7 +15,7 @@ export function Fretboard(): Fretboard {
 	};
 }
 
-export function numToNote(num: number): string {
+export function numToNote(num: number | undefined): string {
 	switch(num) {
 	case 0: return 'E';
 	case 1: return 'F';

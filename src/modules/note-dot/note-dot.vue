@@ -1,9 +1,9 @@
 <template>
 	<div
 		class="note-dot"
-		:class="{ isActive: isActive, isHighlighted: isHighlighted }"
-		@click="$emit('clicked', label, whichString)">
-		<span>{{ numToNote(label) }}</span>
+		:class="{ isActive: isActive, isHighlighted: isHighlighted, isNarrow: isGameMode }"
+		@click="isGameMode ? null : $emit('clicked', label, whichString)">
+		<span v-if="!isGameMode">{{ numToNote(label) }}</span>
 	</div>
 </template>
 
@@ -17,6 +17,7 @@ export default defineComponent({
 		whichString: { type: Number, required: true },
 		isActive: { type: Boolean, default: false },
 		isHighlighted: { type: Boolean, default: false },
+		isGameMode: { type: Boolean, default: false },
 	},
 	emits: ['clicked'],
 	setup() {
@@ -51,5 +52,8 @@ export default defineComponent({
 		background-color: #533483;
 		color: white;
 		border: none;
+	}
+	.isNarrow {
+		width: 24px;
 	}
 </style>

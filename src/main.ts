@@ -11,4 +11,5 @@ createApp(RouterView)
 		.use(i18n).use(router)
 		.use(pinia)
 		.use(widgets)
+		.use(require('vue-three-shortkey'))
 		.mount(document.body);

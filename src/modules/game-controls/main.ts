@@ -1,0 +1,1 @@
+export { default as GameControls } from './game-controls.vue';

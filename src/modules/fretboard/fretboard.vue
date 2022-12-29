@@ -1,26 +1,36 @@
 <template>
 	<div class="fretboard">
+		<function-selector
+		@selected="functionChanged" />
 		<div class="section">
 			<table align="right">
 				<tr>
 					<th v-for="fretNumbers in 13" :key="fretNumbers">{{ fretNumbers-1 }}</th>
 				</tr>
-				<tr v-for="(string, index) in frets.strings" :key="index">
-					<td v-for="note in string.notes" :key="note">
+				<tr v-for="string, i in frets.strings" :key="i">
+					<td v-for="note, j in string.notes" :key="j">
 						<note-dot
 							:label="note"
-							:which-string="index"
-							:is-active="isActive(note)"
+							:which-string="i"
+							:is-active="isActive(i,j)"
 							:is-highlighted="isHighlighted(note)"
+							:is-game-mode="isGameMode"
 							@clicked="noteClicked" />
 					</td>
 				</tr>
 			</table>
 			<toolbar
+				v-if="!isGameMode"
 				:current-intervals="currentIntervals"
 				@interval="changeInterval" />
+			<game-controls
+				:active-note="frets.strings[activeString]?.notes[activeNote]"
+				v-if="isGameMode"
+				@generated="generateNoteAndString" />
 		</div>
-		<div class="generators mb-5">
+		<div 
+		class="generators mb-5"
+		v-if="!isGameMode">
 			<div class="random-note-generator section">
 				<button
 					class="button is-active"
@@ -49,14 +59,19 @@ import { NoteDot } from 'src/modules/note-dot/main';
 import { Fretboard, GuitarString, numToNote } from 'src/domain/fretboard';
 import { Toolbar } from 'src/modules/toolbar/main';
 import { TriadGenerator  } from 'src/modules/triad-generator/main';
+import { FunctionSelector } from 'src/modules/function-selector/main';
+import { GameControls } from 'src/modules/game-controls/main';
 
 export default defineComponent({
 	components: {
 		NoteDot,
 		Toolbar,
 		TriadGenerator,
+		FunctionSelector,
+		GameControls,
 	},
 	setup() {
+		const isGameMode = ref(false);
 		const activeNote = ref(-1);
 		const activeString = ref(-1);
 		const currentIntervals = ref([1]);
@@ -72,6 +87,15 @@ export default defineComponent({
 		const e6String: GuitarString = { notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0] };
 		const frets: Fretboard = { strings: [e6String, bString, gString, dString, aString, e1String] };
 
+		const functionChanged = (mode: boolean) => {
+			isGameMode.value = mode;
+			activeNote.value = -1;
+			if (mode === true) {
+				currentIntervals.value = [];
+				generateNoteAndString(0, 12);
+			}
+		};
+
 		const noteClicked = ((note: number, aString: number) => {
 			if (note === activeNote.value) { 
 				activeNote.value = -1; 
@@ -81,8 +105,18 @@ export default defineComponent({
 			activeString.value = aString;
 		});
 
-		const isActive = ((note: number) => {
-			if(note === activeNote.value) return true;
+		const generateNoteAndString = (from: number, to: number) => {
+			activeNote.value = from + Math.floor(Math.random() * (to+1-from));
+			activeString.value = Math.floor(Math.random() * 6);
+		}
+
+		const isActive = ((i: number, j: number) => {
+			if (isGameMode.value && i === activeString.value && j === activeNote.value) { 
+				return true;
+			}
+			if (!isGameMode.value && frets.strings[i]?.notes[j] === activeNote.value) {
+				return true;
+			}
 		});
 
 		const isHighlighted = ((note: number) => {
@@ -144,6 +178,9 @@ export default defineComponent({
 			randomNote,
 			randomMajorMinor,
 			randomFret,
+			isGameMode,
+			functionChanged,
+			generateNoteAndString
 		};
 	},
 });
