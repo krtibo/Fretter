@@ -64,4 +64,14 @@ export default defineComponent({
         display: flex;
         align-items: center;
     }
+    @media screen and (max-width: 400px) {
+        .control, .generated {
+            flex-direction: column;
+            gap: 12px;
+        }
+        .generated {
+            flex-direction: column;
+            gap: 16px;
+        }
+	}
 </style>

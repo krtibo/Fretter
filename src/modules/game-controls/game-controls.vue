@@ -1,7 +1,7 @@
 <template>
 	<div class="controls">
         <button 
-        class="button"
+        class="button generate-button"
         @click="generateWithBounds(fromValue, toValue)"
         :disabled="invalidBounds"
         v-shortkey="['enter']" @shortkey="generateWithBounds(fromValue, toValue)">
@@ -48,6 +48,9 @@
                 v-if="lastResultText !== ''"
                 class="tag is-large is-rounded"
                 :class="{'is-danger': !lastResultBool, 'is-success': lastResultBool}">{{ lastResultText }}</span>
+                <span class="score title is-5">
+                    Score: {{ score }}
+                </span>
             </div>
         </div>
     </div>
@@ -70,17 +73,21 @@ export default defineComponent({
         const lastResultBool = ref(false);
         const lastResultText = ref('');
         const lastGuess = ref(-1);
+        const score = ref(0);
+        const scoreLock = ref(false);
         const generateWithBounds = (from: number, to: number) => {
             emit('generated', from, to);
             lastResultText.value = '';
             lastGuess.value = -1;
+            scoreLock.value = false;
         };
         generateWithBounds(fromValue.value, toValue.value);
         const validateBounds = () => {
-            if (fromValue.value >= toValue.value) {
+            if (fromValue.value > toValue.value) {
                 invalidBounds.value = true;
             } else {
                 invalidBounds.value = false
+                generateWithBounds(fromValue.value, toValue.value);
             }
             localStorage.fromValue = fromValue.value;
             localStorage.toValue = toValue.value;
@@ -111,6 +118,10 @@ export default defineComponent({
             if(props.activeNote === ans) {
                 lastResultText.value = 'You are correct! 🥹';
                 lastResultBool.value = true;
+                if (!scoreLock.value) {
+                    score.value++;
+                }
+                scoreLock.value = true;
             } else {
                 lastResultText.value = 'Wrong answer! 😔';
                 lastResultBool.value = false;
@@ -130,6 +141,7 @@ export default defineComponent({
             lastResultText,
             lastResultBool,
             lastGuess,
+            score
 		};
 	},
 });
@@ -139,4 +151,20 @@ export default defineComponent({
         display: flex;
         gap: 32px;
     }
+    span:last-of-type {
+        margin-left: auto;
+    }
+    @media screen and (max-width: 400px) {
+        .fromTo, .generate-button {
+            justify-content:space-between;
+            width: 100%;
+        }
+		.answers {
+			flex-direction: column;
+            justify-items: center;
+		}
+        span:last-of-type {
+            margin: auto;
+        }
+	}
 </style>

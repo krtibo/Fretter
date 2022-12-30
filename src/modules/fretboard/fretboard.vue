@@ -267,4 +267,15 @@ export default defineComponent({
 			font-size: 10px;
 		}
 	}
+	@media screen and (max-width: 400px) {
+		.note-dot {
+			width: 12px;
+			height: 12px;
+			font-size: 10px;
+		}
+		.random-scale {
+			flex-direction: column;
+			gap: 16px;
+		}
+	}
 </style>
