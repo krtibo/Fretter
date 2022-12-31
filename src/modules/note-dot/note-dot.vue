@@ -56,4 +56,15 @@ export default defineComponent({
 	.isNarrow {
 		width: 24px;
 	}
+	@media screen and (max-width: 400px) {
+        .note-dot {
+            border: none;
+			background-color: transparent;
+        }
+		.isActive {
+			background-color: #E94560;
+			color: white;
+			border: none;
+		}
+	}
 </style>

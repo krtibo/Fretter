@@ -3,7 +3,7 @@
 		<function-selector
 		:is-game-mode-prop="isGameMode"
 		@selected="functionChanged" />
-		<div class="section">
+		<div class="section board">
 			<table align="right">
 				<tr>
 					<th v-for="fretNumbers in 13" :key="fretNumbers">{{ fretNumbers-1 }}</th>
@@ -34,7 +34,7 @@
 		v-if="!isGameMode">
 			<div class="random-note-generator section">
 				<button
-					class="button is-active"
+					class="button is-active generate-random-scale"
 					@click="generateRandomNote">
 					Generate random scale and fret
 				</button>
@@ -276,6 +276,20 @@ export default defineComponent({
 		.random-scale {
 			flex-direction: column;
 			gap: 16px;
+		}
+		.fretboard {
+			margin-top: 16px;
+		}
+		.section {
+			padding: 16px;
+			margin-top: -16px;
+			box-shadow: 0 0 8px #bbbbbb;
+		}
+		.board {
+			margin-top: -32px;
+		}
+		.generate-random-scale {
+			width: 100%;
 		}
 	}
 </style>

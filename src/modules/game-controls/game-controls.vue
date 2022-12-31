@@ -155,13 +155,18 @@ export default defineComponent({
         margin-left: auto;
     }
     @media screen and (max-width: 400px) {
-        .fromTo, .generate-button {
-            justify-content:space-between;
+        .fromTo {
+            justify-content: space-between;
             width: 100%;
         }
+        .generate-button {
+            width: 100%;
+            margin-top: -16px;
+        }
 		.answers {
-			flex-direction: column;
+            flex-direction: column;
             justify-items: center;
+            gap: 16px;
 		}
         span:last-of-type {
             margin: auto;

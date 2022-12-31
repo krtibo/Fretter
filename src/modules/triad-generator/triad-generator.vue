@@ -2,7 +2,7 @@
     <div class="random-triad-generator section">
         <div class="control">
             <button
-                class="button is-active"
+                class="button is-active generate-triad"
                 @click="generateTriad">
                 Generate random triad
             </button>
@@ -72,6 +72,9 @@ export default defineComponent({
         .generated {
             flex-direction: column;
             gap: 16px;
+        }
+        .generate-triad {
+            width: 100%;
         }
 	}
 </style>
