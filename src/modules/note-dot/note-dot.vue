@@ -1,7 +1,7 @@
 <template>
 	<div
 		class="note-dot"
-		:class="{ isActive: isActive, isHighlighted: isHighlighted, isNarrow: isGameMode }"
+		:class="{ isHighlighted: isHighlighted, isInGameMode: isGameMode, isActive: isActive }"
 		@click="isGameMode ? null : $emit('clicked', label, whichString)">
 		<span v-if="!isGameMode">{{ numToNote(label) }}</span>
 	</div>
@@ -53,7 +53,8 @@ export default defineComponent({
 		color: white;
 		border: none;
 	}
-	.isNarrow {
+	.isInGameMode {
+		border: none;
 		width: 24px;
 	}
 	@media screen and (max-width: 400px) {

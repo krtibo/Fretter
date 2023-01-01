@@ -49,7 +49,10 @@
                 class="tag is-large is-rounded"
                 :class="{'is-danger': !lastResultBool, 'is-success': lastResultBool}">{{ lastResultText }}</span>
                 <span class="score title is-5">
-                    Score: {{ score }}
+                    Score: {{ score }} / {{ achievablePoints }} 
+                    <span v-if="achievablePoints > 0">
+                        ({{ ((score/achievablePoints)*100).toFixed(1) + "%" }})
+                    </span>
                 </span>
             </div>
         </div>
@@ -75,6 +78,7 @@ export default defineComponent({
         const lastGuess = ref(-1);
         const score = ref(0);
         const scoreLock = ref(false);
+        const achievablePoints = ref(0);
         const generateWithBounds = (from: number, to: number) => {
             emit('generated', from, to);
             lastResultText.value = '';
@@ -126,6 +130,7 @@ export default defineComponent({
                 lastResultText.value = 'Wrong answer! 😔';
                 lastResultBool.value = false;
             }
+            achievablePoints.value++;
         };
 		return {
             isDropdownActive,
@@ -141,7 +146,8 @@ export default defineComponent({
             lastResultText,
             lastResultBool,
             lastGuess,
-            score
+            score,
+            achievablePoints
 		};
 	},
 });

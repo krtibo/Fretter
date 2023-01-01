@@ -16,6 +16,7 @@
 							:is-active="isActive(i,j)"
 							:is-highlighted="isHighlighted(note)"
 							:is-game-mode="isGameMode"
+							:class="{'no-background-color': j === 0 && isGameMode}"
 							@clicked="noteClicked" />
 					</td>
 				</tr>
@@ -247,6 +248,10 @@ export default defineComponent({
 		display: flex;
         gap: 64px;
         border-top: 1px solid hsl(0, 0%, 86%);
+	}
+
+	.no-background-color {
+		background-color: transparent;
 	}
 
 	@media screen and (max-width: 1280px) {
