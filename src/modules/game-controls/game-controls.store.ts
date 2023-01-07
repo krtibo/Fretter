@@ -14,7 +14,11 @@ export const useGameControlsStore = defineStore('gameControls', () => {
 	const score = ref(0);
 	const scoreLock = ref(false);
 	const achievablePoints = ref(0);
+	const times = ref([0]);
+	times.value = [];
+	const startTime = ref(0);
 	const generateWithBounds = () => {
+		startTime.value = new Date().getTime();
 		lastResultText.value = '';
 		lastGuess.value = -1;
 		scoreLock.value = false;
@@ -47,7 +51,7 @@ export const useGameControlsStore = defineStore('gameControls', () => {
 				}
 			}
 		}
-		for (let i = value.value.length - 1; i > 0; i--) {
+		for(let i = value.value.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
 			const temp = value.value[i];
 			value.value[i] = value.value[j] as number;
@@ -60,6 +64,9 @@ export const useGameControlsStore = defineStore('gameControls', () => {
 		if(activeNote.value === ans) {
 			lastResultText.value = 'You are correct! 🥹';
 			lastResultBool.value = true;
+			const currentTime = new Date().getTime();
+			times.value.push(currentTime - startTime.value);
+			startTime.value = currentTime;
 			if (!scoreLock.value) {
 				score.value++;
 			}
@@ -70,6 +77,13 @@ export const useGameControlsStore = defineStore('gameControls', () => {
 		}
 		achievablePoints.value++;
 	};
+	const avgTime = computed(() => {
+		let sum = 0;
+		for(const time of times.value) {
+			sum += time;
+		}
+		return sum/times.value.length;
+	});
 	return {
 		isDropdownActive,
 		generateWithBounds,
@@ -86,5 +100,6 @@ export const useGameControlsStore = defineStore('gameControls', () => {
 		score,
 		achievablePoints,
 		setActiveNote,
+		avgTime,
 	};
 });

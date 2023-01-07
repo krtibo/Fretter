@@ -52,7 +52,7 @@
 					:class="{'is-primary': lastGuess === i}"
 					:disabled="lastResultBool"
 					class="button"
-					@shortkey="validateAnswer(answerLabelsCo[i-1])"
+					@shortkey="lastResultBool ? null : validateAnswer(answerLabelsCo[i-1])"
 					@click="validateAnswer(answerLabelsCo[i-1])">
 					{{ numToNote(answerLabelsCo[i-1]) }}
 				</button>
@@ -66,6 +66,10 @@
 					Score: {{ score }} / {{ achievablePoints }}
 					<span v-if="achievablePoints > 0">
 						({{ ((score/achievablePoints)*100).toFixed(1) + "%" }})
+					</span>
+					<span v-if="avgTime">
+						{{ startTime }}
+						{{ (avgTime/1000).toFixed(3) + " s" }}
 					</span>
 				</span>
 			</div>
