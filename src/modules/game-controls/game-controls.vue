@@ -50,6 +50,7 @@
 					:key="i"
 					v-shortkey="[i]"
 					:class="{'is-primary': lastGuess === i}"
+					:disabled="lastResultBool"
 					class="button"
 					@shortkey="validateAnswer(answerLabelsCo[i-1])"
 					@click="validateAnswer(answerLabelsCo[i-1])">

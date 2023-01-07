@@ -18,6 +18,7 @@ export const useGameControlsStore = defineStore('gameControls', () => {
 		lastResultText.value = '';
 		lastGuess.value = -1;
 		scoreLock.value = false;
+		lastResultBool.value = false;
 	};
 	const setActiveNote = (note: number) => {
 		activeNote.value = note;
