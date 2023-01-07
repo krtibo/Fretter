@@ -47,9 +47,7 @@ export default defineComponent({
 });
 </script>
 <style>
-    @media screen and (max-width: 400px) {
-		.buttons {
-            margin: auto;
-        }
-	}
+    .buttons {
+        margin: auto;
+    }
 </style>

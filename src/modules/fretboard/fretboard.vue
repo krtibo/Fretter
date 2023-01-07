@@ -2,7 +2,7 @@
 	<div class="fretboard">
 		<function-selector
 		:is-game-mode-prop="isGameMode"
-		@selected="functionChanged" />
+		@selected="store.functionChanged" />
 		<div class="section board">
 			<table align="right">
 				<tr>
@@ -13,22 +13,22 @@
 						<note-dot
 							:label="note"
 							:which-string="i"
-							:is-active="isActive(i,j)"
-							:is-highlighted="isHighlighted(note)"
+							:is-active="store.isActive(i,j)"
+							:is-highlighted="store.isHighlighted(note)"
 							:is-game-mode="isGameMode"
 							:class="{'no-background-color': j === 0 && isGameMode}"
-							@clicked="noteClicked" />
+							@clicked="store.noteClicked" />
 					</td>
 				</tr>
 			</table>
 			<toolbar
 				v-if="!isGameMode"
 				:current-intervals="currentIntervals"
-				@interval="changeInterval" />
+				@interval="store.changeInterval" />
 			<game-controls
-				:active-note="frets.strings[activeString]?.notes[activeNote]"
+				:active-note="frets.strings[activeString].notes[activeNote]"
 				v-if="isGameMode"
-				@generated="generateNoteAndString" />
+				@generated="store.generateNoteAndString" />
 		</div>
 		<div 
 		class="generators mb-5"
@@ -36,7 +36,7 @@
 			<div class="random-note-generator section">
 				<button
 					class="button is-active generate-random-scale"
-					@click="generateRandomNote">
+					@click="store.generateRandomNote">
 					Generate random scale and fret
 				</button>
 				<div class="random-scale mt-5 pt-4" v-if="randomNote !== -1">
@@ -56,13 +56,15 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue';
+import { defineComponent } from 'vue';
 import { NoteDot } from 'src/modules/note-dot/main';
-import { Fretboard, GuitarString, numToNote } from 'src/domain/fretboard';
+import { numToNote } from 'src/domain/fretboard';
 import { Toolbar } from 'src/modules/toolbar/main';
 import { TriadGenerator  } from 'src/modules/triad-generator/main';
 import { FunctionSelector } from 'src/modules/function-selector/main';
 import { GameControls } from 'src/modules/game-controls/main';
+import { useFretboardStore } from './fretboard.store';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
 	components: {
@@ -73,116 +75,14 @@ export default defineComponent({
 		GameControls,
 	},
 	setup() {
-		const isGameMode = localStorage.isGameMode === 'true' ? ref(true) : ref(false);
-		const activeNote = ref(-1);
-		const activeString = ref(-1);
-		const currentIntervals = ref([1]);
-		const randomNote = ref(-1);
-		const randomMajorMinor = ref("");
-		const randomFret = ref(-1);
-		currentIntervals.value = [];
-		const e1String: GuitarString = { notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0] };
-		const aString: GuitarString  = { notes: [5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5] };
-		const dString: GuitarString  = { notes: [10, 11, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] };
-		const gString: GuitarString  = { notes: [3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 1, 2, 3] };
-		const bString: GuitarString  = { notes: [7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5, 6, 7] };
-		const e6String: GuitarString = { notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0] };
-		const frets: Fretboard = { strings: [e6String, bString, gString, dString, aString, e1String] };
-
-		const functionChanged = (mode: boolean) => {
-			isGameMode.value = mode;
-			activeNote.value = -1;
-			if (mode === true) {
-				currentIntervals.value = [];
-				generateNoteAndString(0, 12);
-			}
-		};
-
-		const noteClicked = ((note: number, aString: number) => {
-			if (note === activeNote.value) { 
-				activeNote.value = -1; 
-			} else {
-				activeNote.value = note;
-			}
-			activeString.value = aString;
-		});
-
-		const generateNoteAndString = (from: number, to: number) => {
-			activeNote.value = from + Math.floor(Math.random() * (to+1-from));
-			activeString.value = Math.floor(Math.random() * 6);
-		}
-
-		const isActive = ((i: number, j: number) => {
-			if (isGameMode.value && i === activeString.value && j === activeNote.value) { 
-				return true;
-			}
-			if (!isGameMode.value && frets.strings[i]?.notes[j] === activeNote.value) {
-				return true;
-			}
-		});
-
-		const isHighlighted = ((note: number) => {
-			if (activeNote.value === note || activeNote.value === -1) return false;
-			for (var currInt of currentIntervals.value) {
-				if ((activeNote.value + currInt) % 12 === note) return true;
-			}
-		});
-
-		const changeInterval = ((value: number) => {
-			if (value === -1) {
-				currentIntervals.value = [];
-				return;
-			}
-			if (currentIntervals.value.indexOf(value) >= 0) {
-				currentIntervals.value.splice(currentIntervals.value.indexOf(value), 1);
-			} else if (currentIntervals.value.indexOf(value) < 0) {
-				currentIntervals.value.push(value);
-			}
-		});
-
-		const generateRandomNote = () => {
-			while (true) {
-				let newValue = Math.floor(Math.random() * 11);
-				if (newValue !== randomNote.value) {
-					randomNote.value = newValue;
-					generateMajorMinor();
-					generateRandomFret();
-					return
-				}
-			}
-		}
-
-		const generateRandomFret = () => {
-			while(true) {
-				let newFret = Math.floor(Math.random() * 12);
-				if (newFret != randomFret.value) {
-					randomFret.value = newFret;
-					return
-				}
-			}
-		}
-
-		const generateMajorMinor = () => {
-			randomMajorMinor.value = Math.floor(Math.random() * 10) % 2 === 1 ? "major" : "minor";
-		}
-
+		const store = useFretboardStore();
+		const { activeNote, ...properties } = storeToRefs(store);
+		activeNote.value = -1;
 		return {
-			frets,
-			activeNote,
-			activeString,
-			noteClicked,
-			isActive,
-			isHighlighted,
-			changeInterval,
-			currentIntervals,
-			generateRandomNote,
 			numToNote,
-			randomNote,
-			randomMajorMinor,
-			randomFret,
-			isGameMode,
-			functionChanged,
-			generateNoteAndString
+			activeNote,
+			...properties,
+			store,
 		};
 	},
 });
@@ -206,54 +106,44 @@ export default defineComponent({
 		height: 32px;
 		vertical-align: middle;
 	}
-
 	.fretboard table tr th {
 		text-align: right;
 		color: #0F3460;
 		padding-right: 12px;
 	}
-
 	.fretboard table tr th:first-child {
 		text-align: center;
 		padding-right: 0;
 	}
-
 	.fretboard table :not(td:first-child) > .note-dot {
 		margin: auto 6px auto auto;
 	}
-
 	.fretboard table td:first-child > .note-dot {
 		margin: auto;
 	}
-
 	.fretboard table td:first-child {
 		background-color: lightgray;
 		color: white;
 	}
-
 	.section {
 		box-shadow: 0 0 16px #bbbbbb;
 		padding: 32px;
 		border-radius: 16px;
 		width: 100%;
 	}
-
 	.generators {
 		display: flex;
 		gap: 32px;
 		align-items: flex-start;
 	}
-
 	.random-scale {
 		display: flex;
         gap: 64px;
         border-top: 1px solid hsl(0, 0%, 86%);
 	}
-
 	.no-background-color {
 		background-color: transparent;
 	}
-
 	@media screen and (max-width: 1280px) {
 		.generators {
 			flex-direction: column;
