@@ -1,0 +1,1 @@
+export { default as FretBoard } from './fret-board.vue';

@@ -1,8 +1,8 @@
 <template>
 	<div class="fretboard">
 		<function-selector
-		:is-game-mode-prop="isGameMode"
-		@selected="store.functionChanged" />
+			:is-game-mode-prop="isGameMode"
+			@selected="store.functionChanged" />
 		<div class="section board">
 			<table align="right">
 				<tr>
@@ -21,31 +21,33 @@
 					</td>
 				</tr>
 			</table>
-			<toolbar
+			<tool-bar
 				v-if="!isGameMode"
 				:current-intervals="currentIntervals"
 				@interval="store.changeInterval" />
 			<game-controls
-				:active-note="frets.strings[activeString].notes[activeNote]"
 				v-if="isGameMode"
+				:active-note="frets.strings[activeString].notes[activeNote]"
 				@generated="store.generateNoteAndString" />
 		</div>
-		<div 
-		class="generators mb-5"
-		v-if="!isGameMode">
+		<div
+			v-if="!isGameMode"
+			class="generators mb-5">
 			<div class="random-note-generator section">
 				<button
 					class="button is-active generate-random-scale"
 					@click="store.generateRandomNote">
 					Generate random scale and fret
 				</button>
-				<div class="random-scale mt-5 pt-4" v-if="randomNote !== -1">
-					<div >
-						<div class="is-6">Scale</div> 
+				<div
+					v-if="randomNote !== -1"
+					class="random-scale mt-5 pt-4">
+					<div>
+						<div class="is-6">Scale</div>
 						<span class="title is-3"> {{ numToNote(randomNote) }} {{ randomMajorMinor }}</span>
 					</div>
 					<div>
-						<div class="is-6">Fret</div> 
+						<div class="is-6">Fret</div>
 						<span class="title is-3">No. {{ randomFret }}</span>
 					</div>
 				</div>
@@ -59,17 +61,17 @@
 import { defineComponent } from 'vue';
 import { NoteDot } from 'src/modules/note-dot/main';
 import { numToNote } from 'src/domain/fretboard';
-import { Toolbar } from 'src/modules/toolbar/main';
+import { ToolBar } from 'src/modules/tool-bar/main';
 import { TriadGenerator  } from 'src/modules/triad-generator/main';
 import { FunctionSelector } from 'src/modules/function-selector/main';
 import { GameControls } from 'src/modules/game-controls/main';
-import { useFretboardStore } from './fretboard.store';
+import { useFretboardStore } from './fret-board.store';
 import { storeToRefs } from 'pinia';
 
 export default defineComponent({
 	components: {
 		NoteDot,
-		Toolbar,
+		ToolBar,
 		TriadGenerator,
 		FunctionSelector,
 		GameControls,

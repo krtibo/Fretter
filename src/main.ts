@@ -14,4 +14,4 @@ createApp(RouterView)
 		.use(require('vue-three-shortkey'))
 		.mount(document.body);
 
-		document.title = 'Fretter App'
+document.title = 'Fretter App';

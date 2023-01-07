@@ -8,7 +8,7 @@ export const useFretboardStore = defineStore('fretboard', () => {
 	const activeString = ref(0);
 	const currentIntervals = ref([1]);
 	const randomNote = ref(-1);
-	const randomMajorMinor = ref("");
+	const randomMajorMinor = ref('');
 	const randomFret = ref(-1);
 	currentIntervals.value = [];
 	const e1String: GuitarString = { notes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0] };
@@ -29,8 +29,8 @@ export const useFretboardStore = defineStore('fretboard', () => {
 	};
 
 	const noteClicked = ((note: number, aString: number) => {
-		if (note === activeNote.value) { 
-			activeNote.value = -1; 
+		if (note === activeNote.value) {
+			activeNote.value = -1;
 		} else {
 			activeNote.value = note;
 		}
@@ -43,7 +43,7 @@ export const useFretboardStore = defineStore('fretboard', () => {
 	};
 
 	const isActive = ((i: number, j: number) => {
-		if (isGameMode.value && i === activeString.value && j === activeNote.value) { 
+		if (isGameMode.value && i === activeString.value && j === activeNote.value) {
 			return true;
 		}
 		if (!isGameMode.value && frets.value.strings[i]?.notes[j] === activeNote.value) {
@@ -53,7 +53,7 @@ export const useFretboardStore = defineStore('fretboard', () => {
 
 	const isHighlighted = ((note: number) => {
 		if (activeNote.value === note || activeNote.value === -1) return false;
-		for (var currInt of currentIntervals.value) {
+		for (const currInt of currentIntervals.value) {
 			if ((activeNote.value + currInt) % 12 === note) return true;
 		}
 	});
@@ -71,29 +71,29 @@ export const useFretboardStore = defineStore('fretboard', () => {
 	});
 
 	const generateRandomNote = () => {
-		while (true) {
-			let newValue = Math.floor(Math.random() * 11);
+		for(;;) {
+			const newValue = Math.floor(Math.random() * 11);
 			if (newValue !== randomNote.value) {
 				randomNote.value = newValue;
 				generateMajorMinor();
 				generateRandomFret();
-				return
+				return;
 			}
 		}
 	};
 
 	const generateRandomFret = () => {
-		while(true) {
-			let newFret = Math.floor(Math.random() * 12);
+		for(;;) {
+			const newFret = Math.floor(Math.random() * 12);
 			if (newFret != randomFret.value) {
 				randomFret.value = newFret;
-				return
+				return;
 			}
 		}
 	};
 
 	const generateMajorMinor = () => {
-		randomMajorMinor.value = Math.floor(Math.random() * 10) % 2 === 1 ? "major" : "minor";
+		randomMajorMinor.value = Math.floor(Math.random() * 10) % 2 === 1 ? 'major' : 'minor';
 	};
 
 	return {
@@ -111,6 +111,6 @@ export const useFretboardStore = defineStore('fretboard', () => {
 		randomFret,
 		isGameMode,
 		functionChanged,
-		generateNoteAndString
+		generateNoteAndString,
 	};
-})
+});

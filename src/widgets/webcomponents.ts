@@ -57,7 +57,8 @@ type EventMapping = {
 }
 
 /** Ensures the custom element is ready to be wrapped by sub-classing, registering, and triggering any lazy init */
-export function _initElement(CustomElement: CustomElementConstructor, name: string): { scopedTag: string; ScopedElement: any } {
+export function _initElement(CustomElement: CustomElementConstructor, name: string):
+	{ scopedTag: string; ScopedElement: typeof CustomElement } {
 	class ScopedElement extends CustomElement {}
 	/* Register custom element with a scoped tag */
 	const scopedTag = toUniqueTag(hyphenate(name));

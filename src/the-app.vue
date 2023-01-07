@@ -1,14 +1,14 @@
 <template>
 	<div class="page container">
-		<fretboard />
+		<fret-board />
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { Fretboard } from './modules/fretboard/main';
+import { FretBoard } from './modules/fret-board/main';
 export default defineComponent({
-	components: { Fretboard },
+	components: { FretBoard },
 });
 </script>
 
