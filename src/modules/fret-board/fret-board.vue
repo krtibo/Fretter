@@ -36,7 +36,7 @@
 			<div class="random-note-generator section">
 				<button
 					class="button is-active generate-random-scale"
-					@click="store.generateRandomNote">
+					@click="store.generateRandomScaleAndFret">
 					Generate random scale and fret
 				</button>
 				<div

@@ -42,13 +42,14 @@ export const useFretboardStore = defineStore('fretboard', () => {
 		activeString.value = Math.floor(Math.random() * 6);
 	};
 
-	const isActive = ((i: number, j: number) => {
-		if (isGameMode.value && i === activeString.value && j === activeNote.value) {
+	const isActive = ((string: number, note: number) => {
+		if (isGameMode.value && string === activeString.value && note === activeNote.value) {
 			return true;
 		}
-		if (!isGameMode.value && frets.value.strings[i]?.notes[j] === activeNote.value) {
+		if (!isGameMode.value && frets.value.strings[string]?.notes[note] === activeNote.value) {
 			return true;
 		}
+		return false;
 	});
 
 	const isHighlighted = ((note: number) => {
@@ -70,30 +71,19 @@ export const useFretboardStore = defineStore('fretboard', () => {
 		}
 	});
 
-	const generateRandomNote = () => {
-		for(;;) {
-			const newValue = Math.floor(Math.random() * 11);
-			if (newValue !== randomNote.value) {
-				randomNote.value = newValue;
-				generateMajorMinor();
-				generateRandomFret();
-				return;
-			}
-		}
+	const generateRandomScaleAndFret = () => {
+		randomNote.value = generateRandomNumberExcluding(randomNote.value, 11);
+		randomFret.value = generateRandomNumberExcluding(randomFret.value, 12);
+		randomMajorMinor.value = Math.floor(Math.random() * 2) ? 'major' : 'minor';
 	};
 
-	const generateRandomFret = () => {
+	const generateRandomNumberExcluding = (numberToExclude: number, upperBound: number): number => {
 		for(;;) {
-			const newFret = Math.floor(Math.random() * 12);
-			if (newFret != randomFret.value) {
-				randomFret.value = newFret;
-				return;
+			const randomNumber = Math.floor(Math.random() * upperBound);
+			if (randomNumber != numberToExclude) {
+				return randomNumber;
 			}
 		}
-	};
-
-	const generateMajorMinor = () => {
-		randomMajorMinor.value = Math.floor(Math.random() * 10) % 2 === 1 ? 'major' : 'minor';
 	};
 
 	return {
@@ -105,7 +95,7 @@ export const useFretboardStore = defineStore('fretboard', () => {
 		isHighlighted,
 		changeInterval,
 		currentIntervals,
-		generateRandomNote,
+		generateRandomScaleAndFret,
 		randomNote,
 		randomMajorMinor,
 		randomFret,

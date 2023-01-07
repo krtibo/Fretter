@@ -3,47 +3,38 @@
 		<button
 			v-shortkey="['l']"
 			class="button"
-			:class="{ 'is-selected is-info': !isGameMode }"
-			@shortkey="toggleLearnMode"
-			@click="toggleLearnMode">
+			:class="{ 'is-selected is-info': !isGameModeProp }"
+			@shortkey="toggleMode(false)"
+			@click="toggleMode(false)">
 			🧠 Learn
 		</button>
 
 		<button
 			v-shortkey="['p']"
 			class="button"
-			:class="{ 'is-selected is-info': isGameMode }"
-			@shortkey="toggleGameMode"
-			@click="toggleGameMode">
+			:class="{ 'is-selected is-info': isGameModeProp }"
+			@shortkey="toggleMode(true)"
+			@click="toggleMode(true)">
 			🕹️ Practice
 		</button>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
 	props: {
 		isGameModeProp: { type: Boolean, default: false },
 	},
 	emits: ['selected'],
-	setup(props, { emit }) {
-		const isGameMode = ref(props.isGameModeProp);
-		const toggleGameMode = () => {
-			isGameMode.value = true;
-			emit('selected', isGameMode.value);
-			localStorage.isGameMode = isGameMode.value;
-		};
-		const toggleLearnMode = () => {
-			isGameMode.value = false;
-			emit('selected', isGameMode.value);
-			localStorage.isGameMode = isGameMode.value;
+	setup(_, { emit }) {
+		const toggleMode = (isGameModeValue: boolean) => {
+			emit('selected', isGameModeValue);
+			localStorage.isGameMode = isGameModeValue;
 		};
 		return {
-			isGameMode,
-			toggleGameMode,
-			toggleLearnMode,
+			toggleMode,
 		};
 	},
 });

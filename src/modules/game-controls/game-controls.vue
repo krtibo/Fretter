@@ -83,7 +83,7 @@ export default defineComponent({
 		activeNote: { type: Number, default: -1 },
 	},
 	emits: ['generated'],
-	setup(props, { emit }) {
+	setup(_, { emit }) {
 		const store = useGameControlsStore();
 		const { ...properties } = storeToRefs(store);
 		const { fromValue, toValue } = storeToRefs(store);
