@@ -2,9 +2,9 @@
 	<div class="controls">
         <button 
         class="button generate-button"
-        @click="generateWithBounds(fromValue, toValue)"
+        @click="generateAndEmit"
         :disabled="invalidBounds"
-        v-shortkey="['enter']" @shortkey="generateWithBounds(fromValue, toValue)">
+        v-shortkey="['enter']" @shortkey="generateAndEmit">
             Generate note
         </button>
         <div class="fromTo">
@@ -14,7 +14,7 @@
                 class="button mt-2"
                 v-model="fromValue"
                 :class="{ 'is-danger is-outlined': invalidBounds }"
-                @change="validateBounds">
+                @change="validateBounds() ? null : generateAndEmit()">
                     <option v-for="i in 12" :key="i" :value="i" :selected="i===1">
                         {{ i }}
                     </option>
@@ -26,7 +26,7 @@
                 class="button mt-2" 
                 v-model="toValue" 
                 :class="{ 'is-danger is-outlined': invalidBounds }"
-                @change="validateBounds">
+                @change="validateBounds() ? null : generateAndEmit()">
                     <option v-for="j in 12" :key="j" :value="j" :selected="j===12">
                         {{ j }}
                     </option>
@@ -62,93 +62,37 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue';
 import { numToNote } from 'src/domain/fretboard';
+import { useGameControlsStore } from './game-controls.store';
+import { storeToRefs } from 'pinia';
+
 export default defineComponent({
     props: {
         activeNote: { type: Number, default: -1 },
     },
 	emits: ['generated'],
+    watch: {
+        activeNote: function () {
+            this.setActiveNote(this.activeNote);
+        },
+    },
 	setup(props, {emit}) {
-        const isDropdownActive = ref(false);
-        const fromValue = ref(Number(localStorage.fromValue) ? Number(localStorage.fromValue) : 1);
-        const toValue = ref(Number(localStorage.toValue) ? Number(localStorage.toValue) : 12);
-        const invalidBounds = ref(false);
-        const answerLabels = ref([-1]);
-        const lastResultBool = ref(false);
-        const lastResultText = ref('');
-        const lastGuess = ref(-1);
-        const score = ref(0);
-        const scoreLock = ref(false);
-        const achievablePoints = ref(0);
-        const generateWithBounds = (from: number, to: number) => {
-            emit('generated', from, to);
-            lastResultText.value = '';
-            lastGuess.value = -1;
-            scoreLock.value = false;
+        const store = useGameControlsStore();
+        const { ...properties } = storeToRefs(store);
+        const { fromValue, toValue } = storeToRefs(store);
+        const { setActiveNote, generateWithBounds, validateBounds, validateAnswer } = store;
+        const generateAndEmit = () => {
+            emit('generated', fromValue.value, toValue.value);
+            generateWithBounds();
         };
-        generateWithBounds(fromValue.value, toValue.value);
-        const validateBounds = () => {
-            if (fromValue.value > toValue.value) {
-                invalidBounds.value = true;
-            } else {
-                invalidBounds.value = false
-                generateWithBounds(fromValue.value, toValue.value);
-            }
-            localStorage.fromValue = fromValue.value;
-            localStorage.toValue = toValue.value;
-        };
-        const answerLabelsCo = computed(() => {
-            const value = ref([-1]);
-            value.value = [];
-            value.value.push(props.activeNote);
-            for(let i=0; i<2; i++) {
-                while(true) {
-                    const randomAnswer = Math.floor(Math.random() * 12);
-                    if (!value.value.includes(randomAnswer)) {
-                        value.value.push(randomAnswer);
-                        break;
-                    }
-                }
-            }
-            for (let i = value.value.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                const temp = value.value[i];
-                value.value[i] = value.value[j] as number;
-                value.value[j] = temp as number;
-            }
-            return value.value;
-        });
-        const validateAnswer = (ans: number | undefined) => {
-            lastGuess.value = answerLabelsCo.value.indexOf(ans!)+1;
-            if(props.activeNote === ans) {
-                lastResultText.value = 'You are correct! 🥹';
-                lastResultBool.value = true;
-                if (!scoreLock.value) {
-                    score.value++;
-                }
-                scoreLock.value = true;
-            } else {
-                lastResultText.value = 'Wrong answer! 😔';
-                lastResultBool.value = false;
-            }
-            achievablePoints.value++;
-        };
-		return {
-            isDropdownActive,
-            generateWithBounds,
-            fromValue,
-            toValue,
-            validateBounds,
-            invalidBounds,
+        generateAndEmit();
+        return {
             numToNote,
-            answerLabels,
-            answerLabelsCo,
+            generateAndEmit,
+            validateBounds,
             validateAnswer,
-            lastResultText,
-            lastResultBool,
-            lastGuess,
-            score,
-            achievablePoints
-		};
+            setActiveNote,
+            ...properties,
+        };
 	},
 });
 </script>
