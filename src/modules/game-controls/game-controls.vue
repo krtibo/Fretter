@@ -68,7 +68,6 @@
 						({{ ((score/achievablePoints)*100).toFixed(1) + "%" }})
 					</span>
 					<span v-if="avgTime">
-						{{ startTime }}
 						{{ (avgTime/1000).toFixed(3) + " s" }}
 					</span>
 				</span>
