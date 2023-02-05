@@ -17,8 +17,6 @@ import { defineComponent } from 'vue';
 import { FretBoard } from './modules/fret-board/main';
 export default defineComponent({
 	components: { FretBoard },
-	setup() {
-	}
 });
 </script>
 <style>

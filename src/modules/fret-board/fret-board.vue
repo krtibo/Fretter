@@ -113,7 +113,7 @@ export default defineComponent({
 		border-radius: 16px;
 		width: 100%;
 	}
-	    .fret-board-v2 {
+	.fret-board-v2 {
         display: inline-grid;
         grid-template-columns: auto;
     }

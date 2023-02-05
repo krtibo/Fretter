@@ -26,6 +26,7 @@ module.exports = {
 			{ test: /\.(scss|sass)$/, use: [...cssLoaders, 'resolve-url-loader', 'sass-loader'] },
 			{ test: /\.(otf|ttf|woff|woff2)$/, type: 'asset/resource', generator: { filename: 'assets/[name]-[contenthash][ext]' } },
 			{ test: /\.json$/, type: 'javascript/auto', use: ['@intlify/vue-i18n-loader'], include: projectPaths(['src/resources']) },
+			{ test: /\.ico$/, use: 'file-loader' },
 		],
 	},
 	plugins: [
