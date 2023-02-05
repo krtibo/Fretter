@@ -19,16 +19,16 @@ export function numToNote(num: number | undefined): string {
 	switch(num) {
 	case 0: return 'E';
 	case 1: return 'F';
-	case 2: return 'F#/Gb';
+	case 2: return 'F#';
 	case 3: return 'G';
-	case 4: return 'G#/Ab';
+	case 4: return 'G#';
 	case 5: return 'A';
-	case 6: return 'A#/Bb';
+	case 6: return 'A#';
 	case 7: return 'B';
 	case 8: return 'C';
-	case 9: return 'C#/Db';
+	case 9: return 'C#';
 	case 10: return 'D';
-	case 11: return 'D#/Eb';
+	case 11: return 'D#';
 	default: return '';
 	}
 }

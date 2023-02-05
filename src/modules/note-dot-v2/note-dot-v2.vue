@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="note-dot"
+		class="note-dot-v2"
 		:class="{ isHighlighted: isHighlighted, isInGameMode: isGameMode, isActive: isActive }"
 		@click="isGameMode ? null : $emit('clicked', label, whichString)">
 		<span v-if="!isGameMode">{{ numToNote(label) }}</span>
@@ -28,20 +28,14 @@ export default defineComponent({
 });
 </script>
 <style>
-	.note-dot {
-		height: 24px;
-		width: 48px;
-		border-radius: 12px;
-		background-color: white;
-		font-size: 12px;
-		color: #E94560;
-		border: 1px solid #E94560;
-		display: flex;
-		cursor: pointer;
-		user-select: none;
-	}
-	.note-dot span {
-		margin: auto;
+	.note-dot-v2 {
+		font-size: 14px;
+		background-color: rgba(230, 230, 230, 0.75);
+        padding: 3px 6px;
+        border-radius: 6px;
+        width: 32px;
+        cursor: pointer;
+        text-align: center;
 	}
 	.isActive {
 		background-color: #E94560;
@@ -54,18 +48,6 @@ export default defineComponent({
 		border: none;
 	}
 	.isInGameMode {
-		border: none;
-		width: 24px;
-	}
-	@media screen and (max-width: 400px) {
-        .note-dot {
-            border: none;
-			background-color: transparent;
-        }
-		.isActive {
-			background-color: #E94560;
-			color: white;
-			border: none;
-		}
+		height: 27px;
 	}
 </style>

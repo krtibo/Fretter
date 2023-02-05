@@ -4,23 +4,33 @@
 			:is-game-mode-prop="isGameMode"
 			@selected="store.functionChanged" />
 		<div class="section board">
-			<table align="right">
-				<tr>
-					<th v-for="fretNumbers in 13" :key="fretNumbers">{{ fretNumbers-1 }}</th>
-				</tr>
-				<tr v-for="string, i in frets.strings" :key="i">
-					<td v-for="note, j in string.notes" :key="j">
-						<note-dot
-							:label="note"
-							:which-string="i"
-							:is-active="store.isActive(i,j)"
-							:is-highlighted="store.isHighlighted(note)"
-							:is-game-mode="isGameMode"
-							:class="{'no-background-color': j === 0 && isGameMode}"
-							@clicked="store.noteClicked" />
-					</td>
-				</tr>
-			</table>
+			<div class="board-and-notation">
+				<div class="fret-board-v2">
+					<div class="board-container">
+						<div class="strings" v-for="string, i in frets.strings" :key="i">
+							<div v-for="note, j in string.notes" :key="j">
+								<note-dot-v2
+								:label="note"
+								:which-string="i"
+								:is-active="store.isActive(i,j)"
+								:is-highlighted="store.isHighlighted(note)"
+								:is-game-mode="isGameMode"
+								@clicked="store.noteClicked"
+								/>
+							</div>
+						</div>
+					</div>
+					<div class="guitar-neck">
+						<div class="guitar-cell" v-for="i in 91" :key="i"></div>
+					</div>
+				</div>
+				<div class="fretboard-dots">
+					<div class="dot" v-for="i in 4" :key="i"></div>
+					<div class="octave">
+						<div class="dot" v-for="i in 2" :key="i"></div>
+					</div>
+				</div>
+			</div>
 			<tool-bar
 				v-if="!isGameMode"
 				:current-intervals="currentIntervals"
@@ -59,7 +69,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { NoteDot } from 'src/modules/note-dot/main';
+import { NoteDotV2 } from 'src/modules/note-dot-v2/main';
 import { numToNote } from 'src/domain/fretboard';
 import { ToolBar } from 'src/modules/tool-bar/main';
 import { TriadGenerator  } from 'src/modules/triad-generator/main';
@@ -70,7 +80,7 @@ import { storeToRefs } from 'pinia';
 
 export default defineComponent({
 	components: {
-		NoteDot,
+		NoteDotV2,
 		ToolBar,
 		TriadGenerator,
 		FunctionSelector,
@@ -95,37 +105,7 @@ export default defineComponent({
 		display: flex;
 		flex-direction: column;
 		gap: 32px;
-		margin-top: 64px;
-	}
-	.fretboard table {
-		border: 1px solid #0F3460;
-		width: 100%;
-		table-layout: fixed;
-		margin-bottom: 32px;
-	}
-	.fretboard table td {
-		border: 1px solid #0F3460;
-		height: 32px;
-		vertical-align: middle;
-	}
-	.fretboard table tr th {
-		text-align: right;
-		color: #0F3460;
-		padding-right: 12px;
-	}
-	.fretboard table tr th:first-child {
-		text-align: center;
-		padding-right: 0;
-	}
-	.fretboard table :not(td:first-child) > .note-dot {
-		margin: auto 6px auto auto;
-	}
-	.fretboard table td:first-child > .note-dot {
-		margin: auto;
-	}
-	.fretboard table td:first-child {
-		background-color: lightgray;
-		color: white;
+		margin-top: 32px;
 	}
 	.section {
 		box-shadow: 0 0 16px #bbbbbb;
@@ -133,6 +113,37 @@ export default defineComponent({
 		border-radius: 16px;
 		width: 100%;
 	}
+	    .fret-board-v2 {
+        display: inline-grid;
+        grid-template-columns: auto;
+    }
+    .guitar-neck {
+        display: grid;
+        grid-template-columns: 64px repeat(12, 50px);
+        grid-template-rows: 26px repeat(5, 39px) 26px;
+        margin: auto;
+    }
+    .guitar-cell {
+        border: 1px solid rgb(233, 233, 233);
+        box-sizing: content-box;
+    }
+    .board-container, .table-bg, .guitar-neck {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .board-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 12px;
+        margin: auto;
+        z-index: 1;
+    }
+    .strings {
+        display: grid;
+        grid-template-columns: 46px repeat(12, 1fr);
+        gap: 18px;
+    }
 	.generators {
 		display: flex;
 		gap: 32px;
@@ -143,8 +154,35 @@ export default defineComponent({
         gap: 64px;
         border-top: 1px solid hsl(0, 0%, 86%);
 	}
-	.no-background-color {
-		background-color: transparent;
+	.board {
+		display: flex;
+		flex-direction: column;
+	}
+	.board-and-notation {
+		margin: auto;
+		display: flex;
+		flex-direction: column;
+		margin-bottom: 32px;
+	}
+	.dot {
+		width: 8px;
+		height: 8px;
+		background-color: #6610F2;
+		border-radius: 4px;
+	}
+	.fretboard-dots {
+		display: grid;
+		grid-template-columns: repeat(3, 100px) 142px 100px;
+		grid-template-rows: auto;
+		align-items: end;
+		padding-left: 248px;
+		margin-top: 4px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.octave {
+		display: flex;
+		gap: 8px;
 	}
 	@media screen and (max-width: 1280px) {
 		.generators {
@@ -158,18 +196,38 @@ export default defineComponent({
 		}
 	}
 	@media screen and (max-width: 900px) {
-		.note-dot {
-			width: 32px;
-			height: 24px;
-			font-size: 10px;
+		.board-container {
+            flex-direction: row;
+            margin-top: 16px;
+            margin-left: auto;
+        }
+		.strings {
+            grid-template-columns: 1fr;
+            grid-template-rows: 29px repeat(12, 21px);
+        }
+        .guitar-neck {
+            display: grid;
+            margin-top: 8px;
+            margin-left: 6px;
+            grid-template-columns: 22px repeat(5, 44px) 22px;
+            grid-template-rows: 57px repeat(12, 39px);
+            margin: auto;
+        }
+		.board-and-notation {
+			flex-direction: row-reverse;
+		}
+		.fretboard-dots {
+			grid-template-rows: 147px repeat(3, 78px) 125px;
+			grid-template-columns: auto;
+			padding-left: 0;
+			margin-top: 12px;
+			margin-right: 4px;
+		}
+		.octave {
+			flex-direction: column;
 		}
 	}
 	@media screen and (max-width: 400px) {
-		.note-dot {
-			width: 12px;
-			height: 12px;
-			font-size: 10px;
-		}
 		.random-scale {
 			flex-direction: column;
 			gap: 16px;
