@@ -1,11 +1,8 @@
 # Dist folder
 dist/*
 
-# Coverage report
-coverage/*
-
 # Node modules
 node_modules/*
 
-# NOT Storybook!
-!/.storybook
+.eslintrc.json
+env.d.ts

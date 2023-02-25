@@ -3,14 +3,14 @@
 	"parser": "vue-eslint-parser",
 	"parserOptions": {
 		"parser": "@typescript-eslint/parser",
-		"ecmaVersion": 2021,
+		"ecmaVersion": "latest",
 		"extraFileExtensions": [".vue"]
 	},
 	"extends": [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
 		"plugin:vue/vue3-recommended",
-		"plugin:storybook/recommended"
+		"plugin:import/recommended"
 	],
 	"plugins": ["@typescript-eslint", "vue"],
 	"overrides": [
@@ -22,6 +22,11 @@
 			}
 		}
 	],
+	"settings": {
+		"import/resolver": {
+			"typescript": {}
+		}
+	},
 	"rules": {
 		"quotes": ["error", "single", "avoid-escape"],
 		"semi": ["error", "always"],

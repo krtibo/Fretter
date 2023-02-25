@@ -1,9 +1,7 @@
+import type { GuitarString } from './guitar-string';
+
 export type Fretboard = {
 	strings: GuitarString[];
-}
-
-export type GuitarString = {
-	notes: number[];
 }
 
 export function Fretboard(): Fretboard {

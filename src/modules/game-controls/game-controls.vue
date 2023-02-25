@@ -78,7 +78,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { numToNote } from 'src/domain/fretboard';
+import { numToNote } from '@/domain/fretboard';
 import { useGameControlsStore } from './game-controls.store';
 import { storeToRefs } from 'pinia';
 

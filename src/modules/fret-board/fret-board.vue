@@ -7,27 +7,26 @@
 			<div class="board-and-notation">
 				<div class="fret-board-v2">
 					<div class="board-container">
-						<div class="strings" v-for="string, i in frets.strings" :key="i">
+						<div v-for="string, i in frets.strings" :key="i" class="strings">
 							<div v-for="note, j in string.notes" :key="j">
 								<note-dot-v2
-								:label="note"
-								:which-string="i"
-								:is-active="store.isActive(i,j)"
-								:is-highlighted="store.isHighlighted(note)"
-								:is-game-mode="isGameMode"
-								@clicked="store.noteClicked"
-								/>
+									:label="note"
+									:which-string="i"
+									:is-active="store.isActive(i,j)"
+									:is-highlighted="store.isHighlighted(note)"
+									:is-game-mode="isGameMode"
+									@clicked="store.noteClicked" />
 							</div>
 						</div>
 					</div>
 					<div class="guitar-neck">
-						<div class="guitar-cell" v-for="i in 91" :key="i"></div>
+						<div v-for="i in 91" :key="i" class="guitar-cell" />
 					</div>
 				</div>
 				<div class="fretboard-dots">
-					<div class="dot" v-for="i in 4" :key="i"></div>
+					<div v-for="i in 4" :key="i" class="dot" />
 					<div class="octave">
-						<div class="dot" v-for="i in 2" :key="i"></div>
+						<div v-for="i in 2" :key="i" class="dot" />
 					</div>
 				</div>
 			</div>
@@ -69,12 +68,12 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { NoteDotV2 } from 'src/modules/note-dot-v2/main';
-import { numToNote } from 'src/domain/fretboard';
-import { ToolBar } from 'src/modules/tool-bar/main';
-import { TriadGenerator  } from 'src/modules/triad-generator/main';
-import { FunctionSelector } from 'src/modules/function-selector/main';
-import { GameControls } from 'src/modules/game-controls/main';
+import { NoteDotV2 } from '@/modules/note-dot-v2/main';
+import { numToNote } from '@/domain/fretboard';
+import { ToolBar } from '@/modules/tool-bar/main';
+import { TriadGenerator  } from '@/modules/triad-generator/main';
+import { FunctionSelector } from '@/modules/function-selector/main';
+import { GameControls } from '@/modules/game-controls/main';
 import { useFretboardStore } from './fret-board.store';
 import { storeToRefs } from 'pinia';
 

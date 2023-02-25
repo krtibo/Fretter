@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { Fretboard, GuitarString } from 'src/domain/fretboard';
+import type { Fretboard, GuitarString } from '@/domain';
 
 export const useFretboardStore = defineStore('fretboard', () => {
 	const isGameMode = localStorage.isGameMode === 'true' ? ref(true) : ref(false);
@@ -53,9 +53,9 @@ export const useFretboardStore = defineStore('fretboard', () => {
 	});
 
 	const isHighlighted = ((note: number) => {
-		if (activeNote.value === note || activeNote.value === -1) return false;
+		if (activeNote.value === note || activeNote.value === -1) return -1;
 		for (const currInt of currentIntervals.value) {
-			if ((activeNote.value + currInt) % 12 === note) return true;
+			if ((activeNote.value + currInt) % 12 === note) return currInt;
 		}
 	});
 
