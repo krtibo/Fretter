@@ -15,14 +15,17 @@
 			isInGameMode: isGameMode,
 			isActive: isActive
 		}"
-		@click="isGameMode ? null : $emit('clicked', label, whichString)">
-		<span v-if="!isGameMode">{{ numToNote(label) }}</span>
+		@click="isGameMode ? null : $emit('clicked', label, whichString)"
+		@mouseover="hover = true"
+		@mouseleave="hover = false">
+		<!-- eslint-disable-next-line vue/no-v-html -->
+		<span v-if="!isGameMode" v-html="hover && isHighlighted > -1 ? intervalMapper(isHighlighted) : numToNote(label)" />
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { numToNote } from '@/domain/fretboard';
+import { defineComponent, ref } from 'vue';
+import { numToNote, intervalMapper } from '@/domain/fretboard';
 
 export default defineComponent({
 	props: {
@@ -34,8 +37,11 @@ export default defineComponent({
 	},
 	emits: ['clicked'],
 	setup() {
+		const hover = ref(false);
 		return {
 			numToNote,
+			intervalMapper,
+			hover,
 		};
 	},
 });

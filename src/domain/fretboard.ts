@@ -30,3 +30,20 @@ export function numToNote(num: number | undefined): string {
 	default: return '';
 	}
 }
+
+export function intervalMapper(interval: number): string {
+	const flatSign = '&#9837;';
+	switch(interval) {
+	default: return '';
+	case 1: return '2' + flatSign;
+	case 2: return '2';
+	case 3: return '3' + flatSign;
+	case 4: return '3';
+	case 5: return '4';
+	case 7: return '5';
+	case 8: return '6' + flatSign;
+	case 9: return '6';
+	case 10: return '7' + flatSign;
+	case 11: return '7';
+	}
+}
