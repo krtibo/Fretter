@@ -59,6 +59,7 @@ export default defineComponent({
 	.isActive {
 		background-color: #E94560;
 		color: white;
+		box-shadow: 0 0 5px 1px #E94560, inset 0 0 0px 2px #e43b57;
 	}
 	/* .isHighlighted {
 		background-color: #533483;
